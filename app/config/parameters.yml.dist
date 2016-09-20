@@ -1,0 +1,4 @@
+parameters:
+    config_path: .dotfiles/config
+    repositories_path: .dotfiles/config
+

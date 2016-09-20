@@ -10,12 +10,21 @@
     ],
     "require": {
         "php": "^5.5.9||^7.0",
+        "incenteev/composer-parameter-handler": "~2.1",
+        "symfony/config": "~3.1",
         "symfony/console": "~3.1",
-        "symfony/dependency-injection": "~3.1",
-        "symfony/config": "~3.1"
+        "symfony/dependency-injection": "~3.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8"
+    },
+    "scripts": {
+        "post-install-cmd": [
+             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
     },
     "autoload": {
         "psr-4": {
@@ -27,6 +36,11 @@
             "DotfilesInstaller\\Test\\": "tests/"
         }
     },
-    "bin": ["bin/dotfiles-installer"]
+    "bin": ["bin/dotfiles-installer"],
+    "extra": {
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        }
+    }
 }
 
