@@ -4,12 +4,16 @@
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 $container = new ContainerBuilder();
 $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../src/config'));
 $loader->load('services.xml');
+
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../app/config'));
+$loader->load('parameters.yml');
 
 $app = $container->get('main.application');
 $app->run();
