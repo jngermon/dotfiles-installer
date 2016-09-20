@@ -1,0 +1,32 @@
+{
+    "name": "jngermon/dotfils-installer",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean-Noël Germon",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": "^5.5.9||^7.0",
+        "symfony/console": "~3.1",
+        "symfony/dependency-injection": "~3.1",
+        "symfony/config": "~3.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "DotfilesInstaller\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DotfilesInstaller\\Test\\": "tests/"
+        }
+    },
+    "bin": ["bin/dotfiles-installer"]
+}
+
