@@ -1,4 +1,3 @@
 parameters:
-    config_path: .dotfiles/config
-    repositories_path: .dotfiles/config
-
+    config_path: .dotfiles/config.yml
+    repositories_path: .dotfiles/repositories/

@@ -15,6 +15,13 @@
             <service id="command.info"
                 class="DotfilesInstaller\Command\InfoCommand"
                 >
+                <argument type="service" id="main.config" />
+            </service>
+
+            <service id="main.config"
+                class="DotfilesInstaller\Component\Config"
+                >
+                <argument>%config_path%</argument>
             </service>
         </services>
 </container>
