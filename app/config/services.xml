@@ -19,7 +19,6 @@
                 class="DotfilesInstaller\Command\InfoCommand"
                 >
                 <argument type="service" id="main.installation" />
-                <argument type="service" id="instruction.loader" />
             </service>
             <service id="command.init"
                 class="DotfilesInstaller\Command\InitCommand"
@@ -30,8 +29,15 @@
             <service id="main.installation"
                 class="DotfilesInstaller\Component\Installation"
                 >
+                <factory service="installation.factory" method="create" />
                 <argument>%config_path%</argument>
+            </service>
+
+            <service id="installation.factory"
+                class="DotfilesInstaller\Component\InstallationFactory"
+                >
                 <argument type="service" id="util.path_converter" />
+                <argument type="service" id="instruction.loader" />
             </service>
 
             <service id="instruction.loader"

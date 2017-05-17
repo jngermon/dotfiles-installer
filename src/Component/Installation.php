@@ -2,8 +2,10 @@
 
 namespace DotfilesInstaller\Component;
 
-use Symfony\Component\Filesystem\Filesystem;
+use DotfilesInstaller\Component\DotfileInstruction\Configuration;
+use DotfilesInstaller\Component\DotfileInstruction\Loader\DotfileInstructionLoaderInterface;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Installation
 {
@@ -11,12 +13,17 @@ class Installation
 
     protected $fs;
 
+    protected $instructionLoader;
+
+    protected $instructions;
+
     public function __construct(
         $path,
-        Util\PathConverter $pathConverter
+        DotfileInstructionLoaderInterface $instructionLoader
     ) {
-        $this->path = $pathConverter->convert($path);
+        $this->path = $path;
         $this->fs = new Filesystem();
+        $this->instructionLoader = $instructionLoader;
     }
 
     public function getPath()
@@ -38,5 +45,14 @@ class Installation
 
             $this->fs->dumpFile($this->path, $yamlDumper->dump($configuration));
         }
+    }
+
+    public function getInstructions()
+    {
+        if (!$this->instructions) {
+            $this->instructions = $this->instructionLoader->load($this->getPath());
+        }
+
+        return $this->instructions;
     }
 }

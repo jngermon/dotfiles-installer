@@ -3,7 +3,6 @@
 namespace DotfilesInstaller\Command;
 
 use DotfilesInstaller\Component\Installation;
-use DotfilesInstaller\Component\DotfileInstruction\Loader\DotfileInstructionLoaderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,13 +17,11 @@ class InfoCommand extends Command
     protected $instructionLoader;
 
     public function __construct(
-        Installation $installation,
-        DotfileInstructionLoaderInterface $instructionLoader
+        Installation $installation
     ) {
         parent::__construct();
 
         $this->installation = $installation;
-        $this->instructionLoader = $instructionLoader;
     }
 
     public function configure()
@@ -43,5 +40,7 @@ class InfoCommand extends Command
 
             return;
         }
+
+        var_dump($this->installation->getInstructions());
     }
 }

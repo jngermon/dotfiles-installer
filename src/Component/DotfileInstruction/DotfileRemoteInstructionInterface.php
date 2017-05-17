@@ -6,5 +6,5 @@ interface DotfileRemoteInstructionInterface
 {
     public function getName();
 
-    public function getUri();
+    public function getUrl();
 }
