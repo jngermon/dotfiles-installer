@@ -5,7 +5,7 @@ namespace DotfilesInstaller\Component;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
 
-class Config
+class Installation
 {
     protected $path;
 

@@ -18,17 +18,17 @@
             <service id="command.info"
                 class="DotfilesInstaller\Command\InfoCommand"
                 >
-                <argument type="service" id="main.config" />
+                <argument type="service" id="main.installation" />
                 <argument type="service" id="instruction.loader" />
             </service>
             <service id="command.init"
                 class="DotfilesInstaller\Command\InitCommand"
                 >
-                <argument type="service" id="main.config" />
+                <argument type="service" id="main.installation" />
             </service>
 
-            <service id="main.config"
-                class="DotfilesInstaller\Component\Config"
+            <service id="main.installation"
+                class="DotfilesInstaller\Component\Installation"
                 >
                 <argument>%config_path%</argument>
                 <argument type="service" id="util.path_converter" />

@@ -2,7 +2,7 @@
 
 namespace DotfilesInstaller\Command;
 
-use DotfilesInstaller\Component\Config;
+use DotfilesInstaller\Component\Installation;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,14 +12,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InitCommand extends Command
 {
-    protected $config;
+    protected $installation;
 
     public function __construct(
-        Config $config
+        Installation $installation
     ) {
         parent::__construct();
 
-        $this->config = $config;
+        $this->installation = $installation;
     }
 
     public function configure()
@@ -32,14 +32,14 @@ class InitCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if ($this->config->isInit()) {
+        if ($this->installation->isInit()) {
             $io->note('The dotfile installer is already init.');
-            $io->note(sprintf('Edit and complete the main "dotfiles.yml" (%s)', $this->config->getPath()));
+            $io->note(sprintf('Edit and complete the main "dotfiles.yml" (%s)', $this->installation->getPath()));
             return;
         }
 
-        $this->config->init();
+        $this->installation->init();
 
-        $io->success(sprintf('Your main "dotfiles.yml" (%s) is created.', $this->config->getPath()));
+        $io->success(sprintf('Your main "dotfiles.yml" (%s) is created.', $this->installation->getPath()));
     }
 }

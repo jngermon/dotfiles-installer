@@ -2,7 +2,7 @@
 
 namespace DotfilesInstaller\Command;
 
-use DotfilesInstaller\Component\Config;
+use DotfilesInstaller\Component\Installation;
 use DotfilesInstaller\Component\DotfileInstruction\Loader\DotfileInstructionLoaderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,17 +13,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InfoCommand extends Command
 {
-    protected $config;
+    protected $installation;
 
     protected $instructionLoader;
 
     public function __construct(
-        Config $config,
+        Installation $installation,
         DotfileInstructionLoaderInterface $instructionLoader
     ) {
         parent::__construct();
 
-        $this->config = $config;
+        $this->installation = $installation;
         $this->instructionLoader = $instructionLoader;
     }
 
@@ -37,8 +37,8 @@ class InfoCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if (!$this->config->isInit()) {
-            $io->warning(sprintf('Unable to find the main "dotfiles.yml" (%s)', $this->config->getPath()));
+        if (!$this->installation->isInit()) {
+            $io->warning(sprintf('Unable to find the main "dotfiles.yml" (%s)', $this->installation->getPath()));
             $io->note('use "dotfilesInstaller init"');
 
             return;
