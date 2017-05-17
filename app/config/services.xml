@@ -41,7 +41,7 @@
             </service>
 
             <service id="instruction.loader"
-                class="DotfilesInstaller\Component\DotfileInstruction\Loader\DotfileInstructionLoader"
+                class="DotfilesInstaller\Component\Instruction\Loader\InstructionLoader"
                 >
             </service>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace DotfilesInstaller\Component\DotfileInstruction\Loader\Exception;
+namespace DotfilesInstaller\Component\Instruction\Loader\Exception;
 
 class ParseException extends \RuntimeException implements LoaderException
 {

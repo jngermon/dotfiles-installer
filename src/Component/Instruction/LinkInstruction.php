@@ -1,8 +1,8 @@
 <?php
 
-namespace DotfilesInstaller\Component\DotfileInstruction;
+namespace DotfilesInstaller\Component\Instruction;
 
-class DotfileLinkInstruction implements DotfileLinkInstructionInterface
+class LinkInstruction implements LinkInstructionInterface
 {
     protected $source;
 
@@ -24,5 +24,10 @@ class DotfileLinkInstruction implements DotfileLinkInstructionInterface
     public function getTarget()
     {
         return $this->target;
+    }
+
+    public function getStatus()
+    {
+        return Instruction::NOT_INSTALLED;
     }
 }

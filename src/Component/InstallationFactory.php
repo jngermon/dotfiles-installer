@@ -2,7 +2,7 @@
 
 namespace DotfilesInstaller\Component;
 
-use DotfilesInstaller\Component\DotfileInstruction\Loader\DotfileInstructionLoaderInterface;
+use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 
 class InstallationFactory
 {
@@ -12,7 +12,7 @@ class InstallationFactory
 
     public function __construct(
         Util\PathConverter $pathConverter,
-        DotfileInstructionLoaderInterface $instructionLoader
+        InstructionLoaderInterface $instructionLoader
     ) {
         $this->pathConverter = $pathConverter;
         $this->instructionLoader = $instructionLoader;

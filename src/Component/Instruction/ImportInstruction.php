@@ -1,8 +1,8 @@
 <?php
 
-namespace DotfilesInstaller\Component\DotfileInstruction;
+namespace DotfilesInstaller\Component\Instruction;
 
-class DotfileImportInstruction implements DotfileImportInstructionInterface
+class ImportInstruction implements ImportInstructionInterface
 {
     protected $name;
 
@@ -24,5 +24,10 @@ class DotfileImportInstruction implements DotfileImportInstructionInterface
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getStatus()
+    {
+        return Instruction::NOT_INSTALLED;
     }
 }

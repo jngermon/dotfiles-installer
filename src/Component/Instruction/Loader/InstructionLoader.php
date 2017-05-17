@@ -1,16 +1,16 @@
 <?php
 
-namespace DotfilesInstaller\Component\DotfileInstruction\Loader;
+namespace DotfilesInstaller\Component\Instruction\Loader;
 
-use DotfilesInstaller\Component\DotfileInstruction\Configuration;
-use DotfilesInstaller\Component\DotfileInstruction\DotfileImportInstruction;
-use DotfilesInstaller\Component\DotfileInstruction\DotfileLinkInstruction;
-use DotfilesInstaller\Component\DotfileInstruction\DotfileRemoteInstruction;
+use DotfilesInstaller\Component\Instruction\Configuration;
+use DotfilesInstaller\Component\Instruction\ImportInstruction;
+use DotfilesInstaller\Component\Instruction\LinkInstruction;
+use DotfilesInstaller\Component\Instruction\RemoteInstruction;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
-class DotfileInstructionLoader implements DotfileInstructionLoaderInterface
+class InstructionLoader implements InstructionLoaderInterface
 {
     public function load($path)
     {
@@ -30,15 +30,15 @@ class DotfileInstructionLoader implements DotfileInstructionLoaderInterface
             $instructions = [];
 
             foreach ($config['remotes'] as $remote) {
-                $instructions[] = new DotfileRemoteInstruction($remote['name'], $remote['url']);
+                $instructions[] = new RemoteInstruction($remote['name'], $remote['url']);
             }
 
             foreach ($config['links'] as $link) {
-                $instructions[] = new DotfileLinkInstruction($link['source'], $link['target']);
+                $instructions[] = new LinkInstruction($link['source'], $link['target']);
             }
 
             foreach ($config['imports'] as $import) {
-                $instructions[] = new DotfileImportInstruction($import['name'], $import['path']);
+                $instructions[] = new ImportInstruction($import['name'], $import['path']);
             }
 
             return $instructions;

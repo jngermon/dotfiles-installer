@@ -1,8 +1,8 @@
 <?php
 
-namespace DotfilesInstaller\Component\DotfileInstruction;
+namespace DotfilesInstaller\Component\Instruction;
 
-class DotfileRemoteInstruction implements DotfileRemoteInstructionInterface
+class RemoteInstruction implements RemoteInstructionInterface
 {
     protected $name;
 
@@ -24,5 +24,10 @@ class DotfileRemoteInstruction implements DotfileRemoteInstructionInterface
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function getStatus()
+    {
+        return Instruction::NOT_INSTALLED;
     }
 }
