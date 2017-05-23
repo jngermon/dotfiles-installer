@@ -5,7 +5,9 @@ namespace DotfilesInstaller\Component\Instruction;
 interface InstructionInterface
 {
     const NOT_INSTALLED = 'NOT_INSTALLED';
-    const INSTALLED = 'INSTALLED';
+    const OK = 'OK';
 
-    public function getStatus();
+    public function getRoot();
+
+    public function __toString();
 }

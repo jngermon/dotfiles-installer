@@ -2,16 +2,21 @@
 
 namespace DotfilesInstaller\Component\Instruction;
 
-class LinkInstruction implements LinkInstructionInterface
+class LinkInstruction extends Instruction implements LinkInstructionInterface
 {
+    const BAD_LINK = 'BAD_LINK';
+
     protected $source;
 
     protected $target;
 
     public function __construct(
+        $root,
         $source,
         $target
     ) {
+        parent::__construct($root);
+
         $this->source = $source;
         $this->target = $target;
     }
@@ -26,8 +31,8 @@ class LinkInstruction implements LinkInstructionInterface
         return $this->target;
     }
 
-    public function getStatus()
+    public function __toString()
     {
-        return Instruction::NOT_INSTALLED;
+        return sprintf('Link %s%s to %s', $this->root, $this->source, $this->target);
     }
 }

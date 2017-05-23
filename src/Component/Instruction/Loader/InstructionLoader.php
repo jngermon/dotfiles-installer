@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class InstructionLoader implements InstructionLoaderInterface
 {
-    public function load($path)
+    public function load($path, $root = "/")
     {
         if (!file_exists($path)) {
             throw new Exception\FileNotFoundException(sprintf('Unable to find the file "%s"', $path));
@@ -30,15 +30,15 @@ class InstructionLoader implements InstructionLoaderInterface
             $instructions = [];
 
             foreach ($config['remotes'] as $remote) {
-                $instructions[] = new RemoteInstruction($remote['name'], $remote['url']);
+                $instructions[] = new RemoteInstruction($root, $remote['name'], $remote['url']);
             }
 
             foreach ($config['links'] as $link) {
-                $instructions[] = new LinkInstruction($link['source'], $link['target']);
+                $instructions[] = new LinkInstruction($root, $link['source'], $link['target']);
             }
 
             foreach ($config['imports'] as $import) {
-                $instructions[] = new ImportInstruction($import['name'], $import['path']);
+                $instructions[] = new ImportInstruction($root, $import['name'], $import['path']);
             }
 
             return $instructions;

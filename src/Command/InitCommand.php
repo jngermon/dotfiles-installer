@@ -35,6 +35,7 @@ class InitCommand extends Command
         if ($this->installation->isInit()) {
             $io->note('The dotfile installer is already init.');
             $io->note(sprintf('Edit and complete the main "dotfiles.yml" (%s)', $this->installation->getPath()));
+
             return;
         }
 

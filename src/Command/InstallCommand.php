@@ -3,7 +3,6 @@
 namespace DotfilesInstaller\Command;
 
 use DotfilesInstaller\Component\Installation;
-use DotfilesInstaller\Component\Instruction\InstructionInterface;
 use Mmc\Processor\Component\Processor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class InfoCommand extends Command
+class InstallCommand extends Command
 {
     protected $installation;
 
@@ -31,7 +30,7 @@ class InfoCommand extends Command
 
     public function configure()
     {
-        $this->setName('info')
+        $this->setName('install')
             ;
     }
 
@@ -46,35 +45,19 @@ class InfoCommand extends Command
             return;
         }
 
-        $everythingOk = true;
         foreach ($this->installation->getInstructions() as $instruction) {
             $response = $this->instructionManager->process([
-                'action' => 'status',
+                'action' => 'install',
                 'instruction' => $instruction,
             ]);
 
             if ($response->isSuccessed()) {
-                if ($response->getOutput() != InstructionInterface::OK) {
-                    $everythingOk = false;
-                }
-                if ($response->getOutput() != InstructionInterface::OK || $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                    $response = $this->instructionManager->process([
-                        'action' => 'info',
-                        'instruction' => $instruction,
-                    ]);
-
-                    if ($response->isSuccessed()) {
-                        $io->text($response->getOutput());
-                    }
+                if ($response->getOutput()) {
+                    $io->text(sprintf('Instruction %s is installed', $instruction->__toString()));
                 }
             } else {
-                $io->error($response->getReasonPhrase());
-                $everythingOk = false;
+                $io->error(sprintf('Instruction %s : %s', $instruction->__toString(), $response->getReasonPhrase()));
             }
-        }
-
-        if ($everythingOk) {
-            $io->success('Everything is OK');
         }
     }
 }
