@@ -5,25 +5,17 @@
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
         <services>
-            <service id="main.application"
-                class="Symfony\Component\Console\Application"
-                >
-                <call method="add">
-                    <argument type="service" id="command.info" />
-                </call>
-                <call method="add">
-                    <argument type="service" id="command.init" />
-                </call>
-            </service>
             <service id="command.info"
                 class="DotfilesInstaller\Command\InfoCommand"
                 >
                 <argument type="service" id="main.installation" />
+                <tag name="command" />
             </service>
             <service id="command.init"
                 class="DotfilesInstaller\Command\InitCommand"
                 >
                 <argument type="service" id="main.installation" />
+                <tag name="command" />
             </service>
 
             <service id="main.installation"
