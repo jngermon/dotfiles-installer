@@ -53,12 +53,16 @@
                     <argument>LinkProcessor</argument>
                 </call>
                 <call method="add">
-                    <argument type="service" id="instruction.manager.remote" />
-                    <argument>RemoteManager</argument>
+                    <argument type="service" id="instruction.processor.remote" />
+                    <argument>RemoteProcessor</argument>
                 </call>
             </service>
 
             <service id="instruction.processor.link" class="DotfilesInstaller\Component\Instruction\Processor\LinkProcessor">
+                <argument>%repositories_path%</argument>
+                <argument type="service" id="util.path_converter" />
+            </service>
+            <service id="instruction.processor.remote" class="DotfilesInstaller\Component\Instruction\Processor\RemoteProcessor">
                 <argument>%repositories_path%</argument>
                 <argument type="service" id="util.path_converter" />
             </service>
