@@ -11,18 +11,6 @@ abstract class AbstractProcessor extends BaseAbstractProcessor
     abstract protected function getSupportedActions();
     abstract protected function getSupportedInstructions();
 
-    protected $repositoriesPath;
-
-    protected $pathConverter;
-
-    public function __construct(
-        $repositoriesPath,
-        $pathConverter
-    ) {
-        $this->repositoriesPath = $repositoriesPath;
-        $this->pathConverter = $pathConverter;
-    }
-
     public function supports($request)
     {
         try {

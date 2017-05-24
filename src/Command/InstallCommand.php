@@ -45,6 +45,8 @@ class InstallCommand extends Command
             return;
         }
 
+        $nothingToInstall = true;
+
         foreach ($this->installation->getInstructions() as $instruction) {
             $response = $this->instructionManager->process([
                 'action' => 'install',
@@ -54,10 +56,16 @@ class InstallCommand extends Command
             if ($response->isSuccessed()) {
                 if ($response->getOutput()) {
                     $io->text(sprintf('Instruction %s is installed', $instruction->__toString()));
+                    $nothingToInstall = false;
                 }
             } else {
                 $io->error(sprintf('Instruction %s : %s', $instruction->__toString(), $response->getReasonPhrase()));
+                $nothingToInstall = false;
             }
+        }
+
+        if ($nothingToInstall) {
+            $io->success('There is nothing to install');
         }
     }
 }

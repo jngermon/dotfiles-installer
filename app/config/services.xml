@@ -64,16 +64,17 @@
                     <argument type="service" id="instruction.processor.remote" />
                     <argument>RemoteProcessor</argument>
                 </call>
+                <call method="add">
+                    <argument type="service" id="instruction.processor.import" />
+                    <argument>ImportProcessor</argument>
+                </call>
             </service>
 
-            <service id="instruction.processor.link" class="DotfilesInstaller\Component\Instruction\Processor\LinkProcessor">
-                <argument>%repositories_path%</argument>
-                <argument type="service" id="util.path_converter" />
-            </service>
-            <service id="instruction.processor.remote" class="DotfilesInstaller\Component\Instruction\Processor\RemoteProcessor">
-                <argument>%repositories_path%</argument>
-                <argument type="service" id="util.path_converter" />
-            </service>
+            <service id="instruction.processor.link" class="DotfilesInstaller\Component\Instruction\Processor\LinkProcessor" />
+
+            <service id="instruction.processor.remote" class="DotfilesInstaller\Component\Instruction\Processor\RemoteProcessor" />
+
+            <service id="instruction.processor.import" class="DotfilesInstaller\Component\Instruction\Processor\ImportProcessor" />
 
             <service id="util.path_converter"
                 class="DotfilesInstaller\Component\Util\PathConverter"

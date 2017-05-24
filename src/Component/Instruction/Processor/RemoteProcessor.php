@@ -26,16 +26,11 @@ class RemoteProcessor extends AbstractProcessor
         ];
     }
 
-    protected function getRepositoryPath(RemoteInstruction $instruction)
-    {
-        return $this->pathConverter->convert($this->repositoriesPath.'/'.$instruction->getName());
-    }
-
     protected function getRepository(RemoteInstruction $instruction)
     {
         $wrapper = new GitWrapper();
 
-        $git = $wrapper->workingCopy($this->getRepositoryPath($instruction));
+        $git = $wrapper->workingCopy($instruction->getPath());
 
         return $git;
     }

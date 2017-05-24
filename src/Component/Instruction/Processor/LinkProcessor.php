@@ -24,16 +24,6 @@ class LinkProcessor extends AbstractProcessor
         ];
     }
 
-    protected function getInstructionTarget(LinkInstruction $instruction)
-    {
-        return $this->pathConverter->convert($instruction->getTarget());
-    }
-
-    protected function getInstructionSource(LinkInstruction $instruction)
-    {
-        return $this->pathConverter->convert($this->repositoriesPath.$instruction->getRoot().$instruction->getSource());
-    }
-
     protected function doProcess($request)
     {
         $instruction = $request['instruction'];
@@ -52,12 +42,12 @@ class LinkProcessor extends AbstractProcessor
     {
         $fs = new Filesystem();
 
-        $link = $fs->readLink($this->getInstructionTarget($instruction));
+        $link = $fs->readLink($instruction->getTarget());
         if (!$link) {
             return InstructionInterface::NOT_INSTALLED;
         }
 
-        if ($link != $this->getInstructionSource($instruction)) {
+        if ($link != $instruction->getSource()) {
             return LinkInstruction::BAD_LINK;
         }
 
@@ -73,12 +63,12 @@ class LinkProcessor extends AbstractProcessor
                 return sprintf('Instruction %s : not installed', $instruction->__toString());
             case LinkInstruction::BAD_LINK:
                 $fs = new Filesystem();
-                $link = $fs->readLink($this->getInstructionTarget($instruction));
+                $link = $fs->readLink($instruction->getTarget());
                 return sprintf(
                     'Instruction %s : not right target (actual : %s != configure : %s)',
                     $instruction->__toString(),
                     $link,
-                    $this->getInstructionSource($instruction)
+                    $instruction->getSource()
                 );
 
         }
@@ -93,8 +83,8 @@ class LinkProcessor extends AbstractProcessor
         $fs = new Filesystem();
 
         $fs->symlink(
-            $this->getInstructionSource($instruction),
-            $this->getInstructionTarget($instruction)
+            $instruction->getSource(),
+            $instruction->getTarget()
         );
 
         return true;
