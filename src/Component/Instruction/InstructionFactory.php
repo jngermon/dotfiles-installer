@@ -31,6 +31,10 @@ class InstructionFactory
     {
         $path = $this->pathConverter->convert($path, $root);
 
+        if (!preg_match('/\.yml$/', $path)) {
+            $path .= DIRECTORY_SEPARATOR.'dotfiles.yml';
+        }
+
         return new ImportInstruction($name, $path);
     }
 

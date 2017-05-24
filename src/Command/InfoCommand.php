@@ -47,7 +47,7 @@ class InfoCommand extends Command
         }
 
         $everythingOk = true;
-        foreach ($this->installation->getInstructions() as $instruction) {
+        foreach ($this->installation->getInstructionIterator() as $instruction) {
             $response = $this->instructionManager->process([
                 'action' => 'status',
                 'instruction' => $instruction,

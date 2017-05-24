@@ -32,4 +32,9 @@ class LinkInstruction implements LinkInstructionInterface
     {
         return sprintf('Link %s to %s', $this->source, $this->target);
     }
+
+    public function getDotfile()
+    {
+        return null;
+    }
 }

@@ -3,6 +3,8 @@
 namespace DotfilesInstaller\Component;
 
 use DotfilesInstaller\Component\Instruction\Configuration;
+use DotfilesInstaller\Component\Instruction\ImportInstruction;
+use DotfilesInstaller\Component\Instruction\InstructionIterator;
 use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
 use Symfony\Component\Filesystem\Filesystem;
@@ -15,7 +17,7 @@ class Installation
 
     protected $instructionLoader;
 
-    protected $instructions;
+    protected $instructionIterator;
 
     public function __construct(
         $path,
@@ -47,12 +49,12 @@ class Installation
         }
     }
 
-    public function getInstructions()
+    public function getInstructionIterator()
     {
-        if (!$this->instructions) {
-            $this->instructions = $this->instructionLoader->load($this->getPath());
+        if (!$this->instructionIterator) {
+            $this->instructionIterator = new InstructionIterator(new ImportInstruction('main', $this->getPath()), $this->instructionLoader);
         }
 
-        return $this->instructions;
+        return $this->instructionIterator;
     }
 }

@@ -4,11 +4,6 @@ namespace DotfilesInstaller\Component\Instruction;
 
 class RemoteInstruction implements RemoteInstructionInterface
 {
-    const NO_ORIGIN_REMOTE = 'NO_ORIGIN_REMOTE';
-    const BAD_ORIGIN_REMOTE = 'BAD_ORIGIN_REMOTE';
-    const HAS_CHANGES = 'HAS_CHANGES';
-    const IS_NOT_UP_TO_DATE = 'IS_NOT_UP_TO_DATE';
-
     protected $name;
 
     protected $url;
@@ -43,5 +38,10 @@ class RemoteInstruction implements RemoteInstructionInterface
     public function __toString()
     {
         return sprintf('Remote %s, %s to %s', $this->name, $this->url, $this->path);
+    }
+
+    public function getDotfile()
+    {
+        return $this->path.DIRECTORY_SEPARATOR.'dotfiles.yml';
     }
 }

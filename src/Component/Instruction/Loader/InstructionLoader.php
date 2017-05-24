@@ -12,16 +12,30 @@ class InstructionLoader implements InstructionLoaderInterface
 {
     protected $instructionFactory;
 
+    protected $loadedPaths;
+
     public function __construct(
         InstructionFactory $instructionFactory
     ) {
         $this->instructionFactory = $instructionFactory;
+        $this->loadedPaths = [];
     }
 
-    public function load($path)
+    public function load($path, $force = false)
     {
-        if (!file_exists($path)) {
+        $path = realpath($path);
+
+        if (!$path || !file_exists($path)) {
             throw new Exception\FileNotFoundException(sprintf('Unable to find the file "%s"', $path));
+        }
+
+        if (!$force && in_array($path, $this->loadedPaths)) {
+            throw new Exception\AlreadyLoadedPathException(sprintf('This file has already been loaded "%s"', $path));
+        }
+
+
+        if (!$force) {
+            $this->loadedPaths[] = $path;
         }
 
         $root = dirname($path);
@@ -51,7 +65,7 @@ class InstructionLoader implements InstructionLoaderInterface
 
             return $instructions;
         } catch (ParseException $e) {
-            throw new Exception\ParseException(sprintf("Unable to parse the YAML string: %s", $e->getMessage()), $e);
+            throw new Exception\ParseException(sprintf("Unable to parse the YAML string: %s", $e->getMessage()), $e->getCode(), $e);
         }
     }
 }

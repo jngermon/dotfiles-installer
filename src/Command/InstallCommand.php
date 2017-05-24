@@ -47,7 +47,7 @@ class InstallCommand extends Command
 
         $nothingToInstall = true;
 
-        foreach ($this->installation->getInstructions() as $instruction) {
+        foreach ($this->installation->getInstructionIterator() as $instruction) {
             $response = $this->instructionManager->process([
                 'action' => 'install',
                 'instruction' => $instruction,

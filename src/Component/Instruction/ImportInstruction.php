@@ -30,4 +30,9 @@ class ImportInstruction implements ImportInstructionInterface
     {
         return sprintf('Import %s', $this->path);
     }
+
+    public function getDotfile()
+    {
+        return $this->path;
+    }
 }
