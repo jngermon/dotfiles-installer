@@ -27,7 +27,7 @@ class InstructionFactory
         return new LinkInstruction($source, $target);
     }
 
-    public function createImport($root, $name, $path)
+    public function createImport($root, $path)
     {
         $path = $this->pathConverter->convert($path, $root);
 
@@ -35,7 +35,7 @@ class InstructionFactory
             $path .= DIRECTORY_SEPARATOR.'dotfiles.yml';
         }
 
-        return new ImportInstruction($name, $path);
+        return new ImportInstruction($path);
     }
 
     public function createRemote($name, $url)

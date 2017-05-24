@@ -52,7 +52,7 @@ class Installation
     public function getInstructionIterator()
     {
         if (!$this->instructionIterator) {
-            $this->instructionIterator = new InstructionIterator(new ImportInstruction('main', $this->getPath()), $this->instructionLoader);
+            $this->instructionIterator = new InstructionIterator(new ImportInstruction($this->getPath()), $this->instructionLoader);
         }
 
         return $this->instructionIterator;

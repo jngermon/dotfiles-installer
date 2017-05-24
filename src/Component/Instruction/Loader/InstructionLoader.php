@@ -59,8 +59,8 @@ class InstructionLoader implements InstructionLoaderInterface
                 $instructions[] = $this->instructionFactory->createLink($root, $link['source'], $link['target']);
             }
 
-            foreach ($config['imports'] as $import) {
-                $instructions[] = $this->instructionFactory->createImport($root, $import['name'], $import['path']);
+            foreach ($config['imports'] as $path) {
+                $instructions[] = $this->instructionFactory->createImport($root, $path);
             }
 
             return $instructions;
