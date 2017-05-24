@@ -3,20 +3,28 @@
 namespace DotfilesInstaller\Component\Instruction\Loader;
 
 use DotfilesInstaller\Component\Instruction\Configuration;
-use DotfilesInstaller\Component\Instruction\ImportInstruction;
-use DotfilesInstaller\Component\Instruction\LinkInstruction;
-use DotfilesInstaller\Component\Instruction\RemoteInstruction;
+use DotfilesInstaller\Component\Instruction\InstructionFactory;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 class InstructionLoader implements InstructionLoaderInterface
 {
-    public function load($path, $root = "/")
+    protected $instructionFactory;
+
+    public function __construct(
+        InstructionFactory $instructionFactory
+    ) {
+        $this->instructionFactory = $instructionFactory;
+    }
+
+    public function load($path)
     {
         if (!file_exists($path)) {
             throw new Exception\FileNotFoundException(sprintf('Unable to find the file "%s"', $path));
         }
+
+        $root = dirname($path);
 
         try {
             $config = Yaml::parse(file_get_contents($path));
@@ -30,15 +38,15 @@ class InstructionLoader implements InstructionLoaderInterface
             $instructions = [];
 
             foreach ($config['remotes'] as $remote) {
-                $instructions[] = new RemoteInstruction($root, $remote['name'], $remote['url']);
+                $instructions[] = $this->instructionFactory->createRemote($remote['name'], $remote['url']);
             }
 
             foreach ($config['links'] as $link) {
-                $instructions[] = new LinkInstruction($root, $link['source'], $link['target']);
+                $instructions[] = $this->instructionFactory->createLink($root, $link['source'], $link['target']);
             }
 
             foreach ($config['imports'] as $import) {
-                $instructions[] = new ImportInstruction($root, $import['name'], $import['path']);
+                $instructions[] = $this->instructionFactory->createImport($root, $import['name'], $import['path']);
             }
 
             return $instructions;

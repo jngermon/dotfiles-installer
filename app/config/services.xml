@@ -43,6 +43,14 @@
             <service id="instruction.loader"
                 class="DotfilesInstaller\Component\Instruction\Loader\InstructionLoader"
                 >
+                <argument type="service" id="instruction.factory" />
+            </service>
+
+            <service id="instruction.factory"
+                class="DotfilesInstaller\Component\Instruction\InstructionFactory"
+                >
+                <argument type="service" id="util.path_converter" />
+                <argument>%repositories_path%</argument>
             </service>
 
             <service id="instruction.processor" alias="instruction.processor.chain" />

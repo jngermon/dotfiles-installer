@@ -2,7 +2,7 @@
 
 namespace DotfilesInstaller\Component\Instruction;
 
-class RemoteInstruction extends Instruction implements RemoteInstructionInterface
+class RemoteInstruction implements RemoteInstructionInterface
 {
     const NO_ORIGIN_REMOTE = 'NO_ORIGIN_REMOTE';
     const BAD_ORIGIN_REMOTE = 'BAD_ORIGIN_REMOTE';
@@ -13,15 +13,16 @@ class RemoteInstruction extends Instruction implements RemoteInstructionInterfac
 
     protected $url;
 
-    public function __construct(
-        $root,
-        $name,
-        $url
-    ) {
-        parent::__construct($root);
+    protected $path;
 
+    public function __construct(
+        $name,
+        $url,
+        $path
+    ) {
         $this->name = $name;
         $this->url = $url;
+        $this->path = $path;
     }
 
     public function getName()
@@ -34,8 +35,13 @@ class RemoteInstruction extends Instruction implements RemoteInstructionInterfac
         return $this->url;
     }
 
+    public function getPath()
+    {
+        return $this->path;
+    }
+
     public function __toString()
     {
-        return sprintf('Remote %s to %s%s', $this->url, $this->root, $this->name);
+        return sprintf('Remote %s, %s to %s', $this->name, $this->url, $this->path);
     }
 }

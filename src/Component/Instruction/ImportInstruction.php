@@ -2,19 +2,16 @@
 
 namespace DotfilesInstaller\Component\Instruction;
 
-class ImportInstruction extends Instruction implements ImportInstructionInterface
+class ImportInstruction implements ImportInstructionInterface
 {
     protected $name;
 
     protected $path;
 
     public function __construct(
-        $root,
         $name,
         $path
     ) {
-        parent::__construct($root);
-
         $this->name = $name;
         $this->path = $path;
     }
@@ -31,6 +28,6 @@ class ImportInstruction extends Instruction implements ImportInstructionInterfac
 
     public function __toString()
     {
-        return sprintf('Import %s to %s%s', $this->path, $this->root, $this->name);
+        return sprintf('Import %s', $this->path);
     }
 }
