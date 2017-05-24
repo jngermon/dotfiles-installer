@@ -3,12 +3,22 @@
 namespace DotfilesInstaller\Component\Instruction\Processor;
 
 use DotfilesInstaller\Component\Instruction\InstructionInterface;
+use DotfilesInstaller\Component\Instruction\Loader\Exception as LoaderException;
+use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 use DotfilesInstaller\Component\Instruction\RemoteInstruction;
 use GitWrapper\GitWrapper;
 
 class RemoteProcessor extends AbstractProcessor
 {
     protected $statuses = [];
+
+    protected $loader;
+
+    public function __construct(
+        InstructionLoaderInterface $loader
+    ) {
+        $this->loader = $loader;
+    }
 
     protected function getSupportedInstructions()
     {
@@ -84,6 +94,14 @@ class RemoteProcessor extends AbstractProcessor
             return RemoteInstruction::IS_NOT_UP_TO_DATE;
         }
 
+        try {
+            $instructions = $this->loader->load($instruction->getDotfile(), true);
+        } catch (LoaderException\FileNotFoundException $e) {
+            return RemoteInstruction::DOTFILE_NOT_FOUND;
+        } catch (LoaderException\ParseException $e) {
+            return RemoteInstruction::MALFORMED_DOTFILE;
+        }
+
         return InstructionInterface::OK;
     }
 
@@ -108,6 +126,10 @@ class RemoteProcessor extends AbstractProcessor
                 return sprintf('Instruction %s : has got local changes', $instruction->__toString());
             case RemoteInstruction::IS_NOT_UP_TO_DATE:
                 return sprintf('Instruction %s : is not up to date', $instruction->__toString());
+            case RemoteInstruction::DOTFILE_NOT_FOUND:
+                return sprintf('Instruction %s : dotfile is not found', $instruction->getDotfile());
+            case RemoteInstruction::MALFORMED_DOTFILE:
+                return sprintf('Instruction %s : dotfile is malformed', $instruction->getDotfile());
         }
     }
 

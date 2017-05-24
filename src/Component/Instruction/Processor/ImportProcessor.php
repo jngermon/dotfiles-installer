@@ -3,10 +3,19 @@
 namespace DotfilesInstaller\Component\Instruction\Processor;
 
 use DotfilesInstaller\Component\Instruction\ImportInstruction;
-use Symfony\Component\Filesystem\Filesystem;
+use DotfilesInstaller\Component\Instruction\Loader\Exception as LoaderException;
+use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 
 class ImportProcessor extends AbstractProcessor
 {
+    protected $loader;
+
+    public function __construct(
+        InstructionLoaderInterface $loader
+    ) {
+        $this->loader = $loader;
+    }
+
     protected function getSupportedInstructions()
     {
         return [
@@ -39,10 +48,12 @@ class ImportProcessor extends AbstractProcessor
 
     protected function getStatus(ImportInstruction $instruction)
     {
-        $fs = new Filesystem();
-
-        if (!$fs->exists($instruction->getPath())) {
-            return ImportInstruction::NOT_INSTALLED;
+        try {
+            $instructions = $this->loader->load($instruction->getDotfile(), true);
+        } catch (LoaderException\FileNotFoundException $e) {
+            return ImportInstruction::DOTFILE_NOT_FOUND;
+        } catch (LoaderException\ParseException $e) {
+            return ImportInstruction::MALFORMED_DOTFILE;
         }
 
         return ImportInstruction::OK;
@@ -53,8 +64,10 @@ class ImportProcessor extends AbstractProcessor
         switch ($this->getStatus($instruction)) {
             case ImportInstruction::OK:
                 return sprintf('Instruction %s : installed', $instruction->__toString());
-            case ImportInstruction::NOT_INSTALLED:
-                return sprintf('Instruction %s : not installed', $instruction->__toString());
+            case ImportInstruction::DOTFILE_NOT_FOUND:
+                return sprintf('Instruction %s : dotfile is not found', $instruction->getDotfile());
+            case ImportInstruction::MALFORMED_DOTFILE:
+                return sprintf('Instruction %s : dotfile is malformed', $instruction->getDotfile());
         }
     }
 

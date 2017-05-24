@@ -72,9 +72,13 @@
 
             <service id="instruction.processor.link" class="DotfilesInstaller\Component\Instruction\Processor\LinkProcessor" />
 
-            <service id="instruction.processor.remote" class="DotfilesInstaller\Component\Instruction\Processor\RemoteProcessor" />
+            <service id="instruction.processor.remote" class="DotfilesInstaller\Component\Instruction\Processor\RemoteProcessor">
+                <argument type="service" id="instruction.loader" />
+            </service>
 
-            <service id="instruction.processor.import" class="DotfilesInstaller\Component\Instruction\Processor\ImportProcessor" />
+            <service id="instruction.processor.import" class="DotfilesInstaller\Component\Instruction\Processor\ImportProcessor">
+                <argument type="service" id="instruction.loader" />
+            </service>
 
             <service id="util.path_converter"
                 class="DotfilesInstaller\Component\Util\PathConverter"
