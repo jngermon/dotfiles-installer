@@ -7,7 +7,9 @@ use DotfilesInstaller\Component\Instruction\ImportInstruction;
 use DotfilesInstaller\Component\Instruction\InstructionIterator;
 use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 class Installation
 {
@@ -38,14 +40,26 @@ class Installation
         return $this->fs->exists($this->path);
     }
 
-    public function init()
+    public function init($defaultConfig = [])
     {
         if (!$this->isInit()) {
             $configuration = new Configuration();
-
+            $processor = new Processor();
             $yamlDumper = new YamlReferenceDumper();
 
-            $this->fs->dumpFile($this->path, $yamlDumper->dump($configuration));
+            $content = $yamlDumper->dump($configuration);
+
+            $content = preg_replace('/\n/', "\n#", $content);
+
+            $default = Yaml::dump($processor->processConfiguration($configuration, [$defaultConfig]));
+
+            $default = preg_replace('/(\n)/', "\n    ", $default);
+
+            $content = preg_replace('/^dotfiles:/', "dotfiles:\n    ".$default, $content);
+
+            $content = preg_replace('/\n#$/', '', $content);
+
+            $this->fs->dumpFile($this->path, $content);
         }
     }
 

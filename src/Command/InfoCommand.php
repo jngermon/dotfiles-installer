@@ -39,13 +39,6 @@ class InfoCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if (!$this->installation->isInit()) {
-            $io->warning(sprintf('Unable to find the main "dotfiles.yml" (%s)', $this->installation->getPath()));
-            $io->note('use "dotfilesInstaller init"');
-
-            return;
-        }
-
         $everythingOk = true;
         foreach ($this->installation->getInstructionIterator() as $instruction) {
             $response = $this->instructionManager->process([
@@ -64,7 +57,7 @@ class InfoCommand extends Command
                     ]);
 
                     if ($response->isSuccessed()) {
-                        $io->text($response->getOutput());
+                        $io->error($response->getOutput());
                     }
                 }
             } else {

@@ -39,7 +39,17 @@ class InitCommand extends Command
             return;
         }
 
-        $this->installation->init();
+        $remote = $io->ask('What is your main remote ?');
+
+        $config = [];
+        if ($remote) {
+            $config['remotes'] = [[
+                'name' => 'main',
+                'url' => $remote,
+            ]];
+        }
+
+        $this->installation->init($config);
 
         $io->success(sprintf('Your main "dotfiles.yml" (%s) is created.', $this->installation->getPath()));
     }
