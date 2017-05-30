@@ -29,6 +29,7 @@ class ImportProcessor extends AbstractProcessor
             'status',
             'info',
             'install',
+            'installStatus',
         ];
     }
 
@@ -41,6 +42,8 @@ class ImportProcessor extends AbstractProcessor
                 return $this->getStatus($instruction);
             case 'info':
                 return $this->getInfo($instruction);
+            case 'installStatus':
+                return $this->installStatus($instruction);
             case 'install':
                 return $this->install($instruction);
         }
@@ -70,6 +73,12 @@ class ImportProcessor extends AbstractProcessor
                 return sprintf('Instruction %s : dotfile is malformed', $instruction->getDotfile());
         }
     }
+
+    protected function installStatus(ImportInstruction $instruction)
+    {
+        return ImportInstruction::OK;
+    }
+
 
     protected function install(ImportInstruction $instruction)
     {

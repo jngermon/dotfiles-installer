@@ -7,6 +7,7 @@ use DotfilesInstaller\Component\Instruction\Loader\Exception as LoaderException;
 use DotfilesInstaller\Component\Instruction\Loader\InstructionLoaderInterface;
 use DotfilesInstaller\Component\Instruction\RemoteInstruction;
 use GitWrapper\GitWrapper;
+use Symfony\Component\Filesystem\Filesystem;
 
 class RemoteProcessor extends AbstractProcessor
 {
@@ -33,6 +34,7 @@ class RemoteProcessor extends AbstractProcessor
             'status',
             'info',
             'install',
+            'installStatus',
         ];
     }
 
@@ -54,6 +56,8 @@ class RemoteProcessor extends AbstractProcessor
                 return $this->getStatus($instruction);
             case 'info':
                 return $this->getInfo($instruction);
+            case 'installStatus':
+                return $this->installStatus($instruction);
             case 'install':
                 return $this->install($instruction);
         }
@@ -130,6 +134,20 @@ class RemoteProcessor extends AbstractProcessor
                 return sprintf('Instruction %s : dotfile is not found', $instruction->getDotfile());
             case RemoteInstruction::MALFORMED_DOTFILE:
                 return sprintf('Instruction %s : dotfile is malformed', $instruction->getDotfile());
+        }
+    }
+
+    protected function installStatus(RemoteInstruction $instruction)
+    {
+        $status = $this->getStatus($instruction);
+
+        switch ($status) {
+            case InstructionInterface::NOT_INSTALLED:
+            case RemoteInstruction::NO_ORIGIN_REMOTE:
+            case RemoteInstruction::BAD_ORIGIN_REMOTE:
+                return $status;
+            default:
+                return InstructionInterface::OK;
         }
     }
 

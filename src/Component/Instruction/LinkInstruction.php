@@ -4,8 +4,6 @@ namespace DotfilesInstaller\Component\Instruction;
 
 class LinkInstruction implements LinkInstructionInterface
 {
-    const BAD_LINK = 'BAD_LINK';
-
     protected $source;
 
     protected $target;

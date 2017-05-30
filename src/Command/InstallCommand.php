@@ -3,6 +3,7 @@
 namespace DotfilesInstaller\Command;
 
 use DotfilesInstaller\Component\Installation;
+use DotfilesInstaller\Component\Instruction\InstructionInterface;
 use Mmc\Processor\Component\Processor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,18 +43,48 @@ class InstallCommand extends Command
 
         foreach ($this->installation->getInstructionIterator() as $instruction) {
             $response = $this->instructionManager->process([
-                'action' => 'install',
-                'instruction' => $instruction,
-            ]);
+                    'action' => 'installStatus',
+                    'instruction' => $instruction,
+                ]);
 
             if ($response->isSuccessed()) {
-                if ($response->getOutput()) {
-                    $io->text(sprintf('Instruction %s is installed', $instruction->__toString()));
-                    $nothingToInstall = false;
+                $launchInstall = false;
+                switch ($response->getOutput()) {
+                    case InstructionInterface::OK:
+                        // Nothing to do
+                        break;
+                    case InstructionInterface::NOT_INSTALLED:
+                        $launchInstall = true;
+                        break;
+                    default:
+                        $infoResponse = $this->instructionManager->process([
+                            'action' => 'info',
+                            'instruction' => $instruction,
+                        ]);
+
+                        if ($infoResponse->isSuccessed()) {
+                            $io->warning($infoResponse->getOutput());
+                            $launchInstall = $io->confirm('Would you like to install (or skip this step) ?');
+                        }
+                        break;
                 }
-            } else {
-                $io->error(sprintf('Instruction %s : %s', $instruction->__toString(), $response->getReasonPhrase()));
-                $nothingToInstall = false;
+
+                if ($launchInstall) {
+                    $response = $this->instructionManager->process([
+                        'action' => 'install',
+                        'instruction' => $instruction,
+                    ]);
+
+                    if ($response->isSuccessed()) {
+                        if ($response->getOutput()) {
+                            $io->text(sprintf('Instruction %s is installed', $instruction->__toString()));
+                            $nothingToInstall = false;
+                        }
+                    } else {
+                        $io->error(sprintf('Instruction %s : %s', $instruction->__toString(), $response->getReasonPhrase()));
+                        $nothingToInstall = false;
+                    }
+                }
             }
         }
 

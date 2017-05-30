@@ -21,6 +21,7 @@ class LinkProcessor extends AbstractProcessor
             'status',
             'info',
             'install',
+            'installStatus',
         ];
     }
 
@@ -35,6 +36,8 @@ class LinkProcessor extends AbstractProcessor
                 return $this->getInfo($instruction);
             case 'install':
                 return $this->install($instruction);
+            case 'installStatus':
+                return $this->installStatus($instruction);
         }
     }
 
@@ -44,6 +47,10 @@ class LinkProcessor extends AbstractProcessor
 
         $link = $fs->readLink($instruction->getTarget());
         if (!$link) {
+            if ($fs->exists($instruction->getTarget())) {
+                return LinkInstruction::TARGET_NOT_FREE;
+            }
+
             return InstructionInterface::NOT_INSTALLED;
         }
 
@@ -61,6 +68,11 @@ class LinkProcessor extends AbstractProcessor
                 return sprintf('Instruction %s : installed', $instruction->__toString());
             case InstructionInterface::NOT_INSTALLED:
                 return sprintf('Instruction %s : not installed', $instruction->__toString());
+            case LinkInstruction::TARGET_NOT_FREE:
+                return sprintf(
+                    'Instruction %s : the target is not free',
+                    $instruction->__toString()
+                );
             case LinkInstruction::BAD_LINK:
                 $fs = new Filesystem();
                 $link = $fs->readLink($instruction->getTarget());
@@ -74,13 +86,23 @@ class LinkProcessor extends AbstractProcessor
         }
     }
 
+    protected function installStatus(LinkInstruction $instruction)
+    {
+        return $this->getStatus($instruction);
+    }
+
     protected function install(LinkInstruction $instruction)
     {
-        if ($this->getStatus($instruction) == InstructionInterface::OK) {
+        $status = $this->getStatus($instruction);
+        if ($status == InstructionInterface::OK) {
             return false;
         }
 
         $fs = new Filesystem();
+
+        if (in_array($status, [LinkInstruction::BAD_LINK, LinkInstruction::TARGET_NOT_FREE])) {
+            $fs->rename($instruction->getTarget(), $instruction->getTarget().'.before_dotfiles');
+        }
 
         $fs->symlink(
             $instruction->getSource(),
